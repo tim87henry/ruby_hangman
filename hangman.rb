@@ -16,27 +16,31 @@ class Hangman
             load_game
             rounds
         elsif option == 1
-            puts "Guess the right word to win the game\n\n"
-            while $word.length < 5 or $word.length > 12
-                random=generate_random_num
-                File.open('5desk.txt').each_with_index do |line,index|
-                    if index == random
-                        $word = line.strip!.downcase
-                    end
-                end
-            end
-
-            $num_chances=calc_num_chances($word)
-            for i in 0..$word.length-1
-                $answer.push("_")
-            end
+            init_game
             rounds
         else
-            puts "Enter a right option"
+            puts "Enter a right option\n\n"
+            play
         end
         
     end
 
+    def init_game
+        puts "Guess the right word to win the game\n\n"
+        while $word.length < 5 or $word.length > 12
+            random=generate_random_num
+            File.open('5desk.txt').each_with_index do |line,index|
+                if index == random
+                    $word = line.strip!.downcase
+                end
+            end
+        end
+
+        $num_chances=calc_num_chances($word)
+        for i in 0..$word.length-1
+            $answer.push("_")
+        end
+        end
     def rounds
         while game_not_over?
             display_answer
@@ -69,7 +73,7 @@ class Hangman
                 save_game
             end
     
-            if ch.bytes[0] < 97 or ch.bytes[0] > 122 or ch.bytes.length > 1
+            if ch.empty? or ch.bytes[0] < 97 or ch.bytes[0] > 122 or ch.bytes.length > 1
                 ch=''
             end
         end
